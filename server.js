@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
 
 const app = express();
@@ -13,8 +14,35 @@ app.use(express.json({ limit: '10mb' }));
 // Serve static files (your frontend)
 app.use(express.static(path.join(__dirname)));
 
-// In-memory database
-let perfumes = [
+// File-based database
+const DATA_FILE = path.join(__dirname, 'perfumes.json');
+
+// Load perfumes from file
+function loadPerfumes() {
+    try {
+        if (fs.existsSync(DATA_FILE)) {
+            const data = fs.readFileSync(DATA_FILE, 'utf8');
+            return JSON.parse(data);
+        }
+    } catch (error) {
+        console.error('Error loading perfumes:', error);
+    }
+    return []; // Return empty array if no file exists
+}
+
+// Save perfumes to file
+function savePerfumes(perfumes) {
+    try {
+        fs.writeFileSync(DATA_FILE, JSON.stringify(perfumes, null, 2));
+        return true;
+    } catch (error) {
+        console.error('Error saving perfumes:', error);
+        return false;
+    }
+}
+
+// Default perfumes
+const DEFAULT_PERFUMES = [
     {
         id: '1',
         name: "Baccarat Rouge 540",
@@ -46,6 +74,13 @@ let perfumes = [
         badge: "Exclusive"
     }
 ];
+
+// Initialize perfumes - load from file or use defaults
+let perfumes = loadPerfumes();
+if (perfumes.length === 0) {
+    perfumes = DEFAULT_PERFUMES;
+    savePerfumes(perfumes);
+}
 
 // Authentication middleware
 const authenticateAdmin = (req, res, next) => {
@@ -82,7 +117,13 @@ app.post('/api/perfumes', authenticateAdmin, (req, res) => {
         };
         
         perfumes.push(newPerfume);
-        res.status(201).json({ success: true, perfume: newPerfume });
+        
+        // Save to file to persist data
+        if (savePerfumes(perfumes)) {
+            res.status(201).json({ success: true, perfume: newPerfume });
+        } else {
+            throw new Error('Failed to save perfume to file');
+        }
     } catch (error) {
         res.status(400).json({ success: false, error: error.message });
     }
@@ -90,15 +131,38 @@ app.post('/api/perfumes', authenticateAdmin, (req, res) => {
 
 // Delete perfume (admin only)
 app.delete('/api/perfumes/:id', authenticateAdmin, (req, res) => {
-    const { id } = req.params;
-    const initialLength = perfumes.length;
-    
-    perfumes = perfumes.filter(perfume => perfume.id !== id);
-    
-    if (perfumes.length < initialLength) {
-        res.json({ success: true, message: 'Perfume deleted successfully' });
-    } else {
-        res.status(404).json({ success: false, error: 'Perfume not found' });
+    try {
+        const { id } = req.params;
+        const initialLength = perfumes.length;
+        
+        perfumes = perfumes.filter(perfume => perfume.id !== id);
+        
+        if (perfumes.length < initialLength) {
+            // Save to file to persist deletion
+            if (savePerfumes(perfumes)) {
+                res.json({ success: true, message: 'Perfume deleted successfully' });
+            } else {
+                throw new Error('Failed to save changes to file');
+            }
+        } else {
+            res.status(404).json({ success: false, error: 'Perfume not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Reset to default perfumes (admin only)
+app.post('/api/reset', authenticateAdmin, (req, res) => {
+    try {
+        perfumes = [...DEFAULT_PERFUMES];
+        if (savePerfumes(perfumes)) {
+            res.json({ success: true, message: 'Reset to default perfumes' });
+        } else {
+            throw new Error('Failed to reset perfumes');
+        }
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
     }
 });
 
@@ -109,11 +173,18 @@ app.get('/', (req, res) => {
 
 // Health check
 app.get('/health', (req, res) => {
-    res.json({ status: 'OK', timestamp: new Date().toISOString() });
+    res.json({ 
+        status: 'OK', 
+        timestamp: new Date().toISOString(),
+        perfumesCount: perfumes.length,
+        hasDataFile: fs.existsSync(DATA_FILE)
+    });
 });
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
     console.log(`Frontend: http://localhost:${PORT}/`);
     console.log(`API: http://localhost:${PORT}/api`);
+    console.log(`Perfumes loaded: ${perfumes.length}`);
+    console.log(`Data file: ${DATA_FILE}`);
 });
