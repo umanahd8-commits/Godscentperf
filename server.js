@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const { v4: uuidv4 } = require('uuid');
 
 const app = express();
@@ -9,7 +10,10 @@ const PORT = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 
-// In-memory database (in production, use a real database like MongoDB)
+// Serve static files (your frontend)
+app.use(express.static(path.join(__dirname)));
+
+// In-memory database
 let perfumes = [
     {
         id: '1',
@@ -43,7 +47,7 @@ let perfumes = [
     }
 ];
 
-// Simple authentication middleware
+// Authentication middleware
 const authenticateAdmin = (req, res, next) => {
     const { username, password } = req.headers;
     
@@ -54,7 +58,7 @@ const authenticateAdmin = (req, res, next) => {
     }
 };
 
-// Routes
+// API Routes
 
 // Get all perfumes
 app.get('/api/perfumes', (req, res) => {
@@ -98,6 +102,11 @@ app.delete('/api/perfumes/:id', authenticateAdmin, (req, res) => {
     }
 });
 
+// Serve the main page
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
 // Health check
 app.get('/health', (req, res) => {
     res.json({ status: 'OK', timestamp: new Date().toISOString() });
@@ -105,5 +114,6 @@ app.get('/health', (req, res) => {
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
-    console.log(`API available at: http://localhost:${PORT}/api`);
+    console.log(`Frontend: http://localhost:${PORT}/`);
+    console.log(`API: http://localhost:${PORT}/api`);
 });
