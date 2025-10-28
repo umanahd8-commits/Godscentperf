@@ -1132,9 +1132,11 @@
     </div>
 
     <script>
-        // API Configuration - Update this with your Render backend URL
-        const API_BASE_URL = 'https://your-backend-service.onrender.com'; // Replace with your actual Render backend URL
-        
+        // API Configuration - Use relative path since both are on same domain
+const API_BASE_URL = window.location.origin; // This will work for both services
+
+// Or if you want to be specific for backend:
+// const API_BASE_URL = 'https://your-backend-service.onrender.com';
         // Admin credentials
         const ADMIN_CREDENTIALS = {
             username: "admin",
