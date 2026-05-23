@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products - Premium Access</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        :root {
+            --bg-dark: #0a0e0c;
+            --card-bg: radial-gradient(circle at top left, #16221d, #0f1613);
+            --gold-primary: #cca43b;
+            --gold-glow: #e0bc5e;
+            --text-white: #ffffff;
+            --text-muted: #8a9590;
+            --border-gold: rgba(204, 164, 59, 0.3);
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-white);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            text-align: center;
+        }
+
+        .header-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-white);
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+            margin-bottom: 12px;
+        }
+
+        .header-subtitle {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.5;
+            font-weight: 400;
+            padding: 0 15px;
+            margin-bottom: 35px;
+        }
+
+        .premium-card {
+            background: var(--card-bg);
+            border: 1.5px solid var(--border-gold);
+            border-radius: 24px;
+            padding: 45px 30px 35px 30px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+
+        .ribbon {
+            position: absolute;
+            top: 18px;
+            right: -38px;
+            background: var(--gold-primary);
+            color: #000000;
+            font-size: 0.65rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 6px 40px;
+            transform: rotate(45deg);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .card-title {
+            font-size: 1.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-top: 10px;
+            margin-bottom: 25px;
+        }
+
+        .price-container {
+            display: inline-flex;
+            align-items: flex-start;
+            justify-content: center;
+            color: var(--gold-primary);
+            font-weight: 800;
+            margin-bottom: 25px;
+            filter: drop-shadow(0 0 12px rgba(204, 164, 59, 0.25));
+        }
+
+        .currency-symbol {
+            font-size: 1.6rem;
+            margin-top: 6px;
+            margin-right: 2px;
+        }
+
+        .amount {
+            font-size: 3.4rem;
+            line-height: 1;
+        }
+
+        .payment-terms {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.5;
+            padding: 0 20px;
+            margin-bottom: 35px;
+        }
+
+        .features-list {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 35px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 18px;
+            font-size: 0.95rem;
+            color: #e2e8f0;
+            line-height: 1.4;
+        }
+
+        .feature-item strong {
+            color: var(--text-white);
+            font-weight: 700;
+        }
+
+        .check-icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 14px;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .cta-button {
+            display: block;
+            width: 100%;
+            background: linear-gradient(135deg, var(--gold-primary), var(--gold-glow));
+            color: #000000;
+            border: none;
+            padding: 16px;
+            border-radius: 50px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 5px 15px rgba(204, 164, 59, 0.2);
+            text-align: center;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(204, 164, 59, 0.4);
+            color: #000000;
+        }
+
+        .cta-button:active {
+            transform: translateY(0);
+        }
+
+        @media (max-width: 400px) {
+            .amount {
+                font-size: 2.8rem;
+            }
+            .currency-symbol {
+                font-size: 1.3rem;
+            }
+            .premium-card {
+                padding: 40px 20px 30px 20px;
+            }
+            .header-title {
+                font-size: 1.6rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="header-title">Get Started</h1>
+        <p class="header-subtitle">Select the membership plan that fits your goals and start earning today.</p>
+
+        <div class="premium-card">
+            <div class="ribbon">Recommended</div>
+            <h2 class="card-title">Premium Access</h2>
+            <div class="price-container">
+                <span class="currency-symbol">₦</span>
+                <span class="amount">14,000</span>
+            </div>
+            <p class="payment-terms">One-time payment for lifetime platform access</p>
+
+            <ul class="features-list">
+                <li class="feature-item">
+                    <svg class="check-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="10" fill="#cca43b"/>
+                        <path d="M8.5 12.5L11 15L16 9" stroke="#000000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span><strong>Full Access to Glamour Gigs Platform</strong></span>
+                </li>
+                <li class="feature-item">
+                    <svg class="check-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="10" fill="#cca43b"/>
+                        <path d="M8.5 12.5L11 15L16 9" stroke="#000000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span><strong>Higher Rates for Media Tasks</strong></span>
+                </li>
+                <li class="feature-item">
+                    <svg class="check-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="10" fill="#cca43b"/>
+                        <path d="M8.5 12.5L11 15L16 9" stroke="#000000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Daily Snap & Engage Tasks</span>
+                </li>
+                <li class="feature-item">
+                    <svg class="check-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="10" fill="#cca43b"/>
+                        <path d="M8.5 12.5L11 15L16 9" stroke="#000000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Access SkillUp Mentorship</span>
+                </li>
+                <li class="feature-item">
+                    <svg class="check-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="10" fill="#cca43b"/>
+                        <path d="M8.5 12.5L11 15L16 9" stroke="#000000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Glamour FaceTime Social Rewards</span>
+                </li>
+                <li class="feature-item">
+                    <svg class="check-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="10" fill="#cca43b"/>
+                        <path d="M8.5 12.5L11 15L16 9" stroke="#000000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>24/7 Priority Support</span>
+                </li>
+            </ul>
+
+            <!-- MODIFIED: Button changed to anchor tag pointing to InfinityFree -->
+            <a href="https://glamourweb.free.nf/glamourpay.php" class="cta-button">Get Premium Access</a>
+        </div>
+    </div>
+</body>
+</html>
